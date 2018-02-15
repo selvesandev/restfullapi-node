@@ -76,3 +76,30 @@ const port = process.env.PORT || 3000;//port where my project should run
 const server = http.createServer(app);
 server.listen(port);
 ```
+Now run your server through terminal.
+```
+npm server.js
+```
+
+## Routes
+We will have all our api routes in the `api` folder in our root directory.
+
+
+#### structure (clone the project and view file for details)
+```
+    ./api/routes/products.js (will contain all our products related routes.)
+    ./api/routes/orders.js (will contain all our order related routes)
+
+```
+
+#### Register your products.js route in your app(app.js)
+```
+const productRoutes = require('./api/routes/products');
+app.use('/products', productRoutes); 
+//meaning anything that starts with the /product uri should pass through products.js
+
+const orderRoutes = require('./api/routes/orders');
+app.use('/orders', orderRoutes);
+```
+
+
