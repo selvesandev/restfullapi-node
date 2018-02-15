@@ -102,4 +102,47 @@ const orderRoutes = require('./api/routes/orders');
 app.use('/orders', orderRoutes);
 ```
 
+## Error Handling.
+##### Prevent Server restart every time we change something with package called `nodemon`
+```
+npm install --save-dev nodemon
+```
+**Note** Nodemon is not globally available it is only available in our project where we installed it.  
 
+add a npm command to start the server with nodemon. `package.json`
+```
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+```
+**Now start the server with `npm start` command**
+
+##### Also add a loggin package to log all the incoming request into our server. `morgan`
+```npm install --save morgal```  
+Now setup morgal to pass all our request through it `app.js`
+
+
+##### Send Json Response on Error (Error Handling)
+```app.js```
+```
+//If the request reaches at this point (check app.js for detail) we will create a 404 Not Found error message
+app.use((req, res, next) => {
+    const error = new Error('Not Found');
+    error.status=400;
+    next(error);
+});
+
+```
+
+Now create a middleware to catch all the Errors. `app.js`
+```
+
+app.use((error, req, res, next) => {
+    res.status(error.status || 500); //set the status code to the error code else 500
+    res.json({
+        error: {
+            message: error.message //send the error message on json response
+        }
+    })
+});
+```
