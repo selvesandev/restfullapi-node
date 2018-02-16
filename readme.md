@@ -102,7 +102,7 @@ const orderRoutes = require('./api/routes/orders');
 app.use('/orders', orderRoutes);
 ```
 
-## Error Handling.
+## Error Handling and Development Helpers.
 ##### Prevent Server restart every time we change something with package called `nodemon`
 ```
 npm install --save-dev nodemon
@@ -119,7 +119,7 @@ add a npm command to start the server with nodemon. `package.json`
 
 ##### Also add a loggin package to log all the incoming request into our server. `morgan`
 ```npm install --save morgal```  
-Now setup morgal to pass all our request through it `app.js`
+Now setup morgan to pass all our request through it `app.js`
 
 
 ##### Send Json Response on Error (Error Handling)
@@ -132,11 +132,20 @@ app.use((req, res, next) => {
     next(error);
 });
 
+app.use((error, req, res, next) => {
+    res.status(error.status || 500);
+    res.json({
+        error: {
+            message: error.message
+        }
+    })
+});
+
+
 ```
 
 Now create a middleware to catch all the Errors. `app.js`
 ```
-
 app.use((error, req, res, next) => {
     res.status(error.status || 500); //set the status code to the error code else 500
     res.json({
@@ -146,3 +155,25 @@ app.use((error, req, res, next) => {
     })
 });
 ```
+
+
+## Extract Body Of incomming Request
+```
+npm install --save body-parser (body parser does not support file)
+```
+**`app.js`**
+```
+const bodyParser = require('body-parser');
+
+app.use(bodyParser.urlencoded({extended: false})); //extended: true allows you to parse reach data 
+//false to parse simple url encoded data
+app.use(bodyParser.json()); //this will now extract json and url ecoded data.
+```
+eg:-
+```
+
+```
+
+## Handling Cors (Cross Origin Request Sharing)
+We can disable the cors by sending the right headers.  
+Append a header to any response we send to the browser.
