@@ -2,6 +2,12 @@ const express = require('express');
 const morgan = require('morgan');
 const app = express();
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+
+mongoose.connect('mongodb://selvesan:selvesan002@node-rest-api-shard-00-00-jcnga.mongodb.net:27017,node-rest-api-shard-00-01-jcnga.mongodb.net:27017,node-rest-api-shard-00-02-jcnga.mongodb.net:27017/test?ssl=true&replicaSet=node-rest-api-shard-0&authSource=admin', {
+    // useMongoClient: true
+});
+
 
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: false}));

@@ -177,3 +177,40 @@ eg:-
 ## Handling Cors (Cross Origin Request Sharing)
 We can disable the cors by sending the right headers.  
 Append a header to any response we send to the browser.
+
+
+## MongoDB and Mongoose.
+Adding MongoDb as our database and mongoose as a package to
+work with that database(store,get,update etc).
+
+#### Install MongoDB (Mongo DB Atlas database as a service.)
+1) To download mongo db in your system you can click the. > solution and > try it now options
+2) But we are going to use mongodb atlas (It is a mongo db database in the cloud managed by the company
+behind mongo db behind the scene it is hosted on AWS)
+3) So go to go started for free section [Atlas](https://www.mongodb.com/cloud/atlas)
+4) Build you new cluster. [keep](https://keep.google.com) for more details.
+
+5) (Let the build process complete, whitelist your ip address) > go to overview and connect.
+    5) Select `Connect to your application` option
+    5) Select the version `here(3.4)` and copy the connect uri string.
+    5) As we are going to use mongoose we dn't need to select the driver (step 3)
+    
+#### Install Mongoose.
+`npm install --save mongoose`  
+**Now require the mongoose library and connect `app.js`**
+```
+const mongoose = require('mongoose');
+
+mongoose.connect('connect uri string', {
+    useMongoClient: true
+});
+```
+
+
+## Working with Mongoose
+Mongoose work with model and schema. So it define. You create a schema first to store the object in
+the database and you define a model based on that which is a js object which will have a couple of function to 
+work with database (fetch,save,update etc)
+
+1) Create a model(product.js) file in `models` folder and define the products schema there.
+2) Require the product.js model in the product route so that we can use the schema there.
