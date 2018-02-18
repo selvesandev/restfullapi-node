@@ -214,3 +214,14 @@ work with database (fetch,save,update etc)
 
 1) Create a model(product.js) file in `models` folder and define the products schema there.
 2) Require the product.js model in the product route so that we can use the schema there.
+3) Check the details working with db code by cloning the repo.
+
+
+## Data Validation.
+#### Define a schema with data validation.
+
+```
+
+```
+#### Handling a better response on mongoose resposne.
+`Check our the controller/routes products.js to checkout the parsed response`

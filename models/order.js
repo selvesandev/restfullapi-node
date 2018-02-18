@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
 
 //Create a schema
-const productSchema = mongoose.Schema({
+const orderSchema = mongoose.Schema({
     //js object to determine how my schema should look like
     _id: mongoose.Schema.Types.ObjectId,//id database later passed from products routes
-    name: {type: String, required: true},
-    price: {type: Number, required: true}
+    product: {type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true},//connect this schema with Product Model
+    quantity: {type: Number, default: 1}
 });
 
 /**
@@ -17,4 +17,4 @@ const productSchema = mongoose.Schema({
  */
 
 
-module.exports = mongoose.model('Product', productSchema);
+module.exports = mongoose.model('Order', orderSchema);

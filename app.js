@@ -8,6 +8,7 @@ mongoose.connect('mongodb://selvesan:selvesan002@node-rest-api-shard-00-00-jcnga
     // useMongoClient: true
 });
 
+// mongoose.Promise = global.Promise;
 
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: false}));
