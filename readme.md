@@ -219,9 +219,70 @@ work with database (fetch,save,update etc)
 
 ## Data Validation.
 #### Define a schema with data validation.
-
 ```
+const mongoose = require('mongoose');
 
+//Create a schema
+const productSchema = mongoose.Schema({
+    //js object to determine how my schema should look like
+    _id: mongoose.Schema.Types.ObjectId,//id database later passed from products routes
+    name: {type: String, required: true},
+    price: {type: Number, required: true}
+});
+
+/**
+ * When you define this schema
+ * Use have by default created a rule that your table will contain id,name and price
+ * Therefore you cannot send a third property(column) to this table
+ * eg: only id,name,price is only valid if you also send for eg a view column it will be ignored.
+ * @type {Model}
+ */
+
+
+module.exports = mongoose.model('Product', productSchema);
 ```
 #### Handling a better response on mongoose resposne.
 `Check our the controller/routes products.js to checkout the parsed response`
+
+
+### Uploading Files
+Install a package named `multer` is simply a package that like body parser will parse incomming body
+but here the form-data(multipart) bodies.  
+[more about multer](https://github.com/expressjs/multer)
+
+```bash
+$ npm install --save multer
+```
+
+Now require the multer package where you want to upload the file here :- in `products.js` route file
+we will upload a product image.
+```
+const multer = require('multer');
+const upload = multer({
+    //file upload configuration
+    dest: 'uploads/' //this configuration will create a upload folder in the project directory.
+});
+```
+
+Now call the multer middleware where you want to upload the file
+``` nodejs
+router.post('/', upload.single('productImage'), (req, res, next) => {
+    console.log(req.file);
+    //this is the new object that will be available to use due to the upload.single middleware/handler being executed.
+});
+```
+
+**There is lot more to know more clone the project and checkout the code**
+
+
+### Making the `uploads` folder publicly available 
+app.js
+```
+app.use('/uploads',express.static('uploads'));
+```
+Now you can access you file with `http://localhost:3000/uploads/filename`
+
+#
+
+**If you want to upload file through binary data**
+[parsing binary data node js](https://stackoverflow.com/questions/16598973/uploading-binary-file-on-node-js)

@@ -1,20 +1,56 @@
 const express = require('express');
 const router = express();
 const mongoose = require('mongoose');
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+    //this configuration basically allows us to handle how the file have to be saved.
+    //multer will execute the function when a new file is uploaded.
+    destination: function (req, file, cb) {
+        //request,file and a callback
+        cb(null, './uploads/');
+    },
+    filename: function (req, file, cb) {
+        cb(null, new Date().toISOString() + '_' + file.originalname);
+    }
+
+});
+
+
+const fileFilter = (req, file, cb) => {
+    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+        cb(null, true);//will store the file
+    } else {
+        cb(new Error('File size not match'), false);//will reject the file
+    }
+};
+
+
+const upload = multer({
+    storage: storage,
+    limits: {
+        fileSize: 1024 * 1025 * 5,//file size limit in bytes here 5mb
+    },
+    fileFilter: fileFilter
+});
+
+
 const Product = require('../../models/product');
 
+
 router.get('/', (req, res, next) => {
-    Product.find().select('name _id price').exec().then((docs) => {
+    Product.find().select('name _id price product_image').exec().then((docs) => {
         const response = {
             count: docs.length,
             products: docs.map((doc) => {
                 return {
                     name: doc.name,
                     price: doc.price,
+                    product_image: doc.product_image,
                     _id: doc._id,
                     request: {
                         type: 'GET',
-                        url: 'http://localhost:3000/products' + doc._id
+                        url: 'http://localhost:3000/products/' + doc._id
                     }
                 }
             })
@@ -30,11 +66,13 @@ router.get('/', (req, res, next) => {
  * Save product to the mongoose database.
  * the product constant is the model instance having api to work with the database.
  */
-router.post('/', (req, res, next) => {
+router.post('/', upload.single('productImage'), (req, res, next) => {
+    console.log(req.file);//this is the new object that will be available to use due to the upload.single middleware/handler being executed.
     const product = new Product({
         _id: new mongoose.Types.ObjectId(),
         name: req.body.name,
-        price: req.body.price
+        price: req.body.price,
+        product_image: req.file.path
     });
 
     product
@@ -62,7 +100,7 @@ router.post('/', (req, res, next) => {
  */
 router.get('/:productId', (req, res, next) => {
     const id = req.params.productId;
-    Product.findById(id).select('_id name price').exec().then((doc) => {
+    Product.findById(id).select('_id name price product_image').exec().then((doc) => {
         //if no product found null is returned.
         if (doc) {
             res.status(200).json({

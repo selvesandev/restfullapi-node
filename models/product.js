@@ -5,7 +5,8 @@ const productSchema = mongoose.Schema({
     //js object to determine how my schema should look like
     _id: mongoose.Schema.Types.ObjectId,//id database later passed from products routes
     name: {type: String, required: true},
-    price: {type: Number, required: true}
+    price: {type: Number, required: true},
+    product_image: {type: String, required: true}
 });
 
 /**
