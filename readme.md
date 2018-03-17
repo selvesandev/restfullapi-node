@@ -336,4 +336,13 @@ const token = jwt.sign({
 ```
 
 
+### Creating a middleware to protect the routes (verifying a token).
+```
+/api/middleware/check-auth.js
+```
+
+Here we are protecting the `api/middleware/check-auth.js`
+
+
+
 

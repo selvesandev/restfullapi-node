@@ -2,6 +2,7 @@ const express = require('express');
 const router = express();
 const mongoose = require('mongoose');
 const multer = require('multer');
+const checkAuth = require('../middleware/check-auth');
 
 const storage = multer.diskStorage({
     //this configuration basically allows us to handle how the file have to be saved.
@@ -66,7 +67,7 @@ router.get('/', (req, res, next) => {
  * Save product to the mongoose database.
  * the product constant is the model instance having api to work with the database.
  */
-router.post('/', upload.single('productImage'), (req, res, next) => {
+router.post('/', checkAuth, upload.single('productImage'), (req, res, next) => {
     console.log(req.file);//this is the new object that will be available to use due to the upload.single middleware/handler being executed.
     const product = new Product({
         _id: new mongoose.Types.ObjectId(),
