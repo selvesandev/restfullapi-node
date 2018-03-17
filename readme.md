@@ -205,7 +205,7 @@ mongoose.connect('connect uri string', {
     useMongoClient: true
 });
 ```
-
+**Note if you are using nodemon.json file for password,api_key etc you must restart your server once adding a new key in your nodemon.json.**
 
 ## Working with Mongoose
 Mongoose work with model and schema. So it define. You create a schema first to store the object in
@@ -286,3 +286,54 @@ Now you can access you file with `http://localhost:3000/uploads/filename`
 
 **If you want to upload file through binary data**
 [parsing binary data node js](https://stackoverflow.com/questions/16598973/uploading-binary-file-on-node-js)
+
+
+### Encrypt Password
+For the authenthorization we will require some user's to login.
+  
+Create a new Model `/models/user.js`    
+Create a route `/api/routes/user.js` and create a sigin and signup
+
+> To encrypt the password we will use `node.bcrypt.js` library [bcrypt library](https://github.com/kelektiv/node.bcrypt.js)
+```
+npm install --save bcrypt
+```
+
+
+
+
+## JWT Authorization
+##### Create a new route for login  in `user.js` 
+ Where the user can send the email `address` and `password` to login and get the token in response  
+**Checkout `routes/users.js`**
+
+```
+```
+NOW Donwload the [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken) package
+```
+$ npm install jsonwebtoken
+
+```
+Import the jwt package where you would like to use here `/routes/user.js`
+
+```
+const jwt = require('jsonwebtoken');
+const token = jwt.sign(payload,privateKey,otheroptions,[you can get the token here or is returned by this function and catch it in the variable]); //for the private key we have set up the key in our environment variable file **nodemon.json**
+
+//From user.js
+const token = jwt.sign({
+                            email: users[0].email,
+                            id: users[0]._id
+                        }, process.env.JWT_KEY,
+                        {
+                            expiresIn: "1h"
+                        }
+                    );
+                    return res.status(200).json({
+                        message: 'Auth Successful',
+                        token: token
+                    });
+```
+
+
+
