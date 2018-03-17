@@ -181,7 +181,11 @@ Append a header to any response we send to the browser.
 
 ## MongoDB and Mongoose.
 Adding MongoDb as our database and mongoose as a package to
-work with that database(store,get,update etc).
+work with that database(store,get,update etc). 
+
+* If you would like to use mysql instead of mongo db
+[MYSQL](https://www.w3schools.com/nodejs/nodejs_mysql.asp)
+
 
 #### Install MongoDB (Mongo DB Atlas database as a service.)
 1) To download mongo db in your system you can click the. > solution and > try it now options
@@ -344,5 +348,9 @@ const token = jwt.sign({
 Here we are protecting the `api/middleware/check-auth.js`
 
 
+
+
+### Creating Controllers (Getting close to MVC approach)
+Here we have added controller for the `orders` only checkout the file `/api/routes/orders.js` and `/api/Controllers/Orders.js`
 
 
